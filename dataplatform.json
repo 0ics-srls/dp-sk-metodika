@@ -163,6 +163,118 @@
     "noveltyKey": "itemId|version",
     "retryFailed": "newUrlOnly"
   },
+  "pipeline": [
+    {
+      "step": "detect",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-detect@v0.1.0",
+      "params": {
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "annoFrom": "${source.config.annoFrom}",
+        "annoTo": "${source.config.annoTo}",
+        "uvoRobotsAck": "${source.config.uvoRobotsAck}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}",
+        "baseUrl": "${source.config.baseUrl}",
+        "delaySeconds": "${source.config.delaySeconds}",
+        "verifyTls": "${source.config.verifyTls}",
+        "state": "${source.state}",
+        "refreshToken": "${source.config.refreshToken}"
+      },
+      "emits": "catalog",
+      "retry": { "type": "exponential", "maxAttempts": 3, "interval": "PT5M" },
+      "timeout": "PT10M"
+    },
+    {
+      "step": "grab",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-grab@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "concurrencyLimit": 1,
+      "params": {
+        "items": "${items}",
+        "dir": "${dataRoot}/dp-sk-metodika/${source.id}/raw",
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "annoFrom": "${source.config.annoFrom}",
+        "annoTo": "${source.config.annoTo}",
+        "uvoRobotsAck": "${source.config.uvoRobotsAck}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}",
+        "baseUrl": "${source.config.baseUrl}",
+        "delaySeconds": "${source.config.delaySeconds}",
+        "verifyTls": "${source.config.verifyTls}"
+      },
+      "retry": { "type": "fixed", "maxAttempts": 2, "interval": "PT2M" },
+      "timeout": "PT2H",
+      "allowedHosts": ["www.financnasprava.sk", "www.mfsr.sk", "nbs.sk", "www.uvo.gov.sk"]
+    },
+    {
+      "step": "convert",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-convert@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "params": {
+        "items": "${items}",
+        "dirIn": "${dataRoot}/dp-sk-metodika/${source.id}/raw",
+        "dirOut": "${dataRoot}/dp-sk-metodika/${source.id}/plan",
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}"
+      },
+      "resources": {
+        "maxMemoryMbytes": 3072,
+        "cpuLimit": 2
+      },
+      "timeout": "PT2H",
+      "heartbeatMaxSeconds": 900
+    },
+    {
+      "step": "ingest",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-ingest@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "db": "dataset",
+      "params": {
+        "items": "${items}",
+        "dirIn": "${dataRoot}/dp-sk-metodika/${source.id}/plan",
+        "connString": "${dataset.connString}",
+        "schema": "ds_sk_metodika"
+      },
+      "timeout": "PT1H",
+      "produces": [
+        "ds_sk_metodika.documents",
+        "ds_sk_metodika.passages",
+        "ds_sk_metodika.skipped",
+        "ds_sk_metodika.coverage"
+      ]
+    },
+    {
+      "step": "embed",
+      "class": "git:github.com/0ics-srls/dp-lex-embed@dp-p7.1",
+      "perItem": true,
+      "chunkSize": 1,
+      "concurrencyLimit": 1,
+      "db": "dataset",
+      "secrets": ["JINA_API_KEY"],
+      "params": {
+        "items": "${items}",
+        "connString": "${dataset.connString}",
+        "table": "ds_sk_metodika.passages",
+        "keyColumn": "id",
+        "textColumns": ["text_contextual"],
+        "vectorColumn": "embedding",
+        "tokenBudget": "${source.config.tokenBudget}",
+        "dryRun": "${source.config.dryRun}",
+        "jinaApiKey": "${secret.JINA_API_KEY}"
+      },
+      "retry": { "type": "exponential", "maxAttempts": 3, "interval": "PT2M" },
+      "timeout": "PT30M",
+      "heartbeatMaxSeconds": 600,
+      "produces": ["ds_sk_metodika.passages"]
+    }
+  ],
   "releases": {
     "breakingChanges": {
       "0.1.0": {
