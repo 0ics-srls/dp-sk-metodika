@@ -1,0 +1,12 @@
+{
+  "description": "How to use the Slovak methodological guidance corpus (PDF documents of Financna sprava SR, MF SR Financny spravodajca, NBS and, when enabled, UVO): what it holds, which Tool to call for what, how to read the results and the honest limits (guidance is not a source of law, the binding text is the PDF at source_url, no stemming, OCR of scans, licences, UVO collection off by default because of robots.txt). One row with the Slovak text and a short Italian summary. No parameters.",
+  "version": 1,
+  "parameters": {
+    "type": "object",
+    "properties": {}
+  },
+  "annotations": { "readOnlyHint": true, "idempotentHint": true },
+  "maxRows": 1,
+  "timeoutMs": 5000,
+  "pagination": "none"
+}

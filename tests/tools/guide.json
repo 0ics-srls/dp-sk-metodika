@@ -1,0 +1,5 @@
+{
+  "tool": "guide",
+  "params": {},
+  "expect": { "minRows": 1, "maxRows": 1 }
+}
