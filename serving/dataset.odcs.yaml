@@ -1,0 +1,211 @@
+apiVersion: v3.2.0
+kind: DataContract
+id: urn:dataplatform:ds_sk_metodika
+name: Slovak methodological guidance (Financna sprava, MF SR, NBS, UVO)
+version: 0.1.0
+status: active
+domain: legal
+description:
+  purpose: Methodological guidance PDFs of Slovak authorities - Financna sprava SR (metodicke pokyny, usmernenia, zavery komisii, prehlady zmluv o zamedzeni dvojitemu zdaneniu), Ministerstvo financii SR (Financny spravodajca), Narodna banka Slovenska and Urad pre verejne obstaravanie - with estremi, PDF text (text layer or local OCR), full-text index and embeddable passages.
+  usage: Read through the Tools of the sk-metodika package.
+  limitations: Guidance is not a source of law, the binding text is the PDF at source_url; the full-text configuration is sk_unaccent (simple plus unaccent, no stemming); MF SR Financny spravodajca from 2010 (earlier years hold only zip archives); UVO is off by default (robots.txt) and layout (c) detail records are not collected; licences of Financna sprava, MF SR and UVO are not published, NBS requires attribution and unaltered files.
+team:
+  name: 0ics data platform
+  members:
+    - username: operator
+      role: owner
+slaProperties:
+  - property: freshness
+    value: 30
+    unit: d
+    description: The authorities publish a few documents a month; a monthly re-check is enough.
+customProperties:
+  - property: license
+    value: source-terms-not-published
+schema:
+  - name: documents
+    physicalName: documents
+    description: Guidance documents. Identity is (fonte, source_id) with source_id derived from the unique PDF URL path. The full text is served by the doc Tool in slices only.
+    customProperties:
+      - property: search
+        value: fts
+      - property: ftsField
+        value: search_vector
+      - property: ftsConfig
+        value: sk_unaccent
+    properties:
+      - name: id
+        logicalType: string
+        physicalType: uuid
+        primaryKey: true
+      - name: fonte
+        logicalType: string
+        physicalType: text
+        description: Source site (financnasprava, mfsr-spravodajca, nbs-metodicke, uvo-metodicke)
+      - name: source_id
+        logicalType: string
+        physicalType: text
+        description: Slug of the PDF URL path (unique per fonte)
+      - name: legacy_doc_id
+        logicalType: string
+        physicalType: text
+        description: doc_id of the legacy collector, kept so rows can be mapped
+      - name: ente
+        logicalType: string
+        physicalType: text
+        description: Issuing body
+      - name: tipo
+        logicalType: string
+        physicalType: text
+        description: Document type (code type such as MP, or the section, site or dokument)
+      - name: section
+        logicalType: string
+        physicalType: text
+        description: Section of the site (Financna sprava) or site
+      - name: group_label
+        logicalType: string
+        physicalType: text
+        description: Group of the listing (year, UVO leaf)
+      - name: numero
+        logicalType: string
+        physicalType: text
+        description: Code as printed (10/DZPaU/2026/MP, MF/013819/2025-74, 7/2026) or NULL
+      - name: number
+        logicalType: integer
+        physicalType: integer
+        description: Running number of the code when the source gives one
+      - name: dept
+        logicalType: string
+        physicalType: text
+        description: Department code in the code of the document
+      - name: anno
+        logicalType: integer
+        physicalType: integer
+        description: Year, NULL when unknown
+      - name: data
+        logicalType: date
+        physicalType: date
+        description: Publication date when known
+      - name: oggetto
+        logicalType: string
+        physicalType: text
+        description: Title of the document
+      - name: text_raw
+        logicalType: string
+        physicalType: text
+        description: Full text (PDF text layer or local OCR)
+        customProperties:
+          - property: largeValue
+            value: true
+      - name: text_source
+        logicalType: string
+        physicalType: text
+        description: pdf or ocr
+      - name: source_url
+        logicalType: string
+        physicalType: text
+        description: PDF on the site of the authority (the binding text)
+      - name: pdf_bytes
+        logicalType: integer
+        physicalType: integer
+      - name: pdf_pages
+        logicalType: integer
+        physicalType: integer
+      - name: pdf_created
+        logicalType: date
+        physicalType: date
+        description: Creation date from the PDF metadata
+      - name: ingested_at
+        logicalType: timestamp
+        physicalType: timestamptz
+      - name: search_vector
+        logicalType: string
+        physicalType: tsvector
+        description: Generated sk_unaccent full-text vector (simple + unaccent, no stemming) over oggetto and text_raw
+  - name: passages
+    physicalName: passages
+    description: Passages of a document (what is embedded). The best passage per document feeds the semantic search.
+    customProperties:
+      - property: search
+        value: vector
+      - property: embeddingField
+        value: embedding
+      - property: embeddingModel
+        value: jina-embeddings-v3
+    properties:
+      - name: id
+        logicalType: integer
+        physicalType: bigint
+        primaryKey: true
+      - name: document_id
+        logicalType: string
+        physicalType: uuid
+        description: Parent documents.id
+      - name: seq
+        logicalType: integer
+        physicalType: integer
+      - name: text
+        logicalType: string
+        physicalType: text
+        customProperties:
+          - property: largeValue
+            value: true
+      - name: text_contextual
+        logicalType: string
+        physicalType: text
+        description: Passage text prefixed with the estremi of the document (what is embedded)
+        customProperties:
+          - property: largeValue
+            value: true
+      - name: embedding
+        logicalType: array
+        physicalType: vector(1024)
+  - name: skipped
+    physicalName: skipped
+    description: Items seen but not turned into a document, with the reason.
+    properties:
+      - name: id
+        logicalType: integer
+        physicalType: bigint
+        primaryKey: true
+      - name: fonte
+        logicalType: string
+        physicalType: text
+      - name: item_ref
+        logicalType: string
+        physicalType: text
+      - name: reason
+        logicalType: string
+        physicalType: text
+      - name: seen_at
+        logicalType: timestamp
+        physicalType: timestamptz
+  - name: coverage
+    physicalName: coverage
+    description: Listed versus taken per Catalog item (section, year page, site, leaf), with coverage markers in note.
+    properties:
+      - name: id
+        logicalType: integer
+        physicalType: bigint
+        primaryKey: true
+      - name: fonte
+        logicalType: string
+        physicalType: text
+      - name: item_id
+        logicalType: string
+        physicalType: text
+      - name: listed
+        logicalType: integer
+        physicalType: integer
+      - name: taken
+        logicalType: integer
+        physicalType: integer
+      - name: skipped
+        logicalType: integer
+        physicalType: integer
+      - name: note
+        logicalType: string
+        physicalType: text
+      - name: noted_at
+        logicalType: timestamp
+        physicalType: timestamptz
