@@ -1,0 +1,29 @@
+{
+  "description": "Search Slovak methodological guidance (PDF documents): Financna sprava SR (metodicke pokyny, usmernenia, zavery komisii, prehlady zmluv o zamedzeni dvojitemu zdaneniu), MF SR Financny spravodajca (from 2010), NBS metodicke usmernenia and stanoviska, UVO (only when enabled). Hybrid mode fuses full-text (sk_unaccent: case and diacritics are ignored, NO stemming, so inflected forms do not match) and vector ranking over the passages with reciprocal rank fusion. Each hit gives id, fonte, source_id, ente, tipo, section, numero, anno, data, oggetto, a highlight (headline, only for a full-text match), a short snippet (best passage, at most 700 characters), text_source (pdf or ocr) and source_url (the PDF, the binding text). Read the full text with sk-metodika_doc by id. Parameters: query (web-search syntax), k (1..50, default 10), mode (hybrid, lexical, semantic), filters fonte, section, tipo (case-insensitive), ente (substring), anno_from, anno_to, data_from, data_to. With no query the documents are listed by tipo, anno, numero (a call without any parameter lists the first page). Guidance is not a source of law. Example: {\"query\": \"metodicky pokyn dan z prijmov\", \"fonte\": \"financnasprava\", \"anno_from\": 2024}.",
+  "version": 1,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "maxLength": 1000,
+        "x-embed": { "into": "q_vec", "column": "passages.embedding", "model": "jina-embeddings-v3" }
+      },
+      "k": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 },
+      "mode": { "type": "string", "enum": ["hybrid", "lexical", "semantic"], "default": "hybrid" },
+      "fonte": { "type": "string", "enum": ["financnasprava", "mfsr-spravodajca", "nbs-metodicke", "uvo-metodicke"] },
+      "section": { "type": "string", "maxLength": 100 },
+      "tipo": { "type": "string", "maxLength": 50 },
+      "ente": { "type": "string", "maxLength": 200 },
+      "anno_from": { "type": "integer" },
+      "anno_to": { "type": "integer" },
+      "data_from": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+      "data_to": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+    }
+  },
+  "annotations": { "readOnlyHint": true, "idempotentHint": true },
+  "maxRows": 50,
+  "maxBytes": 1048576,
+  "timeoutMs": 15000,
+  "pagination": "none"
+}

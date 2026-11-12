@@ -1,0 +1,291 @@
+{
+  "$schema": "https://schemas.dataplatform.0ics.ai/dataplatform/1.json",
+  "name": "sk-metodika",
+  "version": "0.1.0",
+  "hostApi": "1",
+  "sources": [
+    {
+      "title": "Financna sprava SR - metodicke pokyny, usmernenia, zavery komisii, prehlady zmluv o zamedzeni dvojitemu zdaneniu",
+      "path": "https://www.financnasprava.sk/",
+      "licenses": [
+        {
+          "name": "source-terms-not-published",
+          "title": "financnasprava.sk; no licence text published",
+          "path": "https://www.financnasprava.sk/"
+        }
+      ]
+    },
+    {
+      "title": "Ministerstvo financii SR - Financny spravodajca",
+      "path": "https://www.mfsr.sk/sk/financie/financny-spravodajca/",
+      "licenses": [
+        {
+          "name": "source-terms-not-published",
+          "title": "mfsr.sk; no licence text published",
+          "path": "https://www.mfsr.sk/"
+        }
+      ]
+    },
+    {
+      "title": "Narodna banka Slovenska - metodicke usmernenia, stanoviska a odporucania",
+      "path": "https://nbs.sk/dohlad-nad-financnym-trhom/ofs/informacie-pre-odbornu-verejnost/metodicke-usmernenia-stanoviska-a-odporucania/",
+      "licenses": [
+        {
+          "name": "nbs-reuse-attribution-no-alteration",
+          "title": "NBS terms of use: reuse allowed, NBS named as source, the electronic file must not be altered",
+          "path": "https://nbs.sk/disclaimer-sk/"
+        }
+      ]
+    },
+    {
+      "title": "Urad pre verejne obstaravanie - metodicke usmernenia a vykladove stanoviska (adapter off by default, robots.txt)",
+      "path": "https://www.uvo.gov.sk/",
+      "licenses": [
+        {
+          "name": "source-terms-not-published",
+          "title": "uvo.gov.sk; no licence text published; robots.txt disallows generic agents",
+          "path": "https://www.uvo.gov.sk/"
+        }
+      ]
+    }
+  ],
+  "sourceTypes": [
+    {
+      "key": "fs-sections",
+      "title": "Financna sprava SR guidance sections (PDF listings)",
+      "configSchema": {
+        "type": "object",
+        "properties": {
+          "sections": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["metodicke-pokyny", "metodicke-usmernenia", "zavery-komisii", "prehlady-zmluv-zdz"] },
+            "minItems": 1,
+            "uniqueItems": true,
+            "default": ["metodicke-pokyny", "metodicke-usmernenia", "zavery-komisii", "prehlady-zmluv-zdz"]
+          },
+          "only": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "section": { "type": "string", "enum": ["metodicke-pokyny", "metodicke-usmernenia", "zavery-komisii", "prehlady-zmluv-zdz"] },
+                "docId": { "type": "string", "minLength": 1 }
+              },
+              "required": ["section", "docId"],
+              "additionalProperties": false
+            },
+            "description": "Keep only these documents (sample filter)"
+          },
+          "maxDocs": { "type": "integer", "minimum": 1, "description": "Sample filter: stop after this many documents per item" },
+          "baseUrl": { "type": "string", "description": "Site base URL (replay server in tests)" },
+          "delaySeconds": { "type": "number", "minimum": 0.6, "default": 0.6 },
+          "verifyTls": { "type": "boolean", "default": true },
+          "refreshToken": { "type": "string" },
+          "tokenBudget": { "type": "integer", "minimum": 0, "default": 20000, "description": "Hard stop of Jina tokens per embedding Run" },
+          "dryRun": { "type": "boolean", "default": false, "description": "Embedding step plans only: no Jina call, nothing written" }
+        }
+      },
+      "x-ui": {
+        "order": ["sections", "only", "maxDocs", "baseUrl", "delaySeconds", "verifyTls", "refreshToken", "tokenBudget", "dryRun"],
+        "labels": { "sections": "Sections", "only": "Only these documents", "maxDocs": "Max documents", "baseUrl": "Site base URL", "delaySeconds": "Pause between requests (s)", "verifyTls": "Verify TLS", "refreshToken": "Refresh token", "tokenBudget": "Embedding token budget", "dryRun": "Embedding dry run" },
+        "help": {
+          "sections": "Sections of financnasprava.sk to collect (default all four)",
+          "only": "Sample filter: section and document id",
+          "maxDocs": "Sample filter for the live proof",
+          "baseUrl": "Only change for a replay server",
+          "delaySeconds": "Pause between requests to the source, at least 0.6 s",
+          "verifyTls": "Leave on",
+          "refreshToken": "Change this value to fetch all listings again",
+          "tokenBudget": "Maximum Jina tokens one Run may spend on embeddings (default 20000)",
+          "dryRun": "Plan the embeddings without calling Jina"
+        }
+      }
+    },
+    {
+      "key": "pdf-sites",
+      "title": "Slovak PDF sites (MF SR Financny spravodajca, NBS, UVO)",
+      "configSchema": {
+        "type": "object",
+        "properties": {
+          "sites": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["mfsr-spravodajca", "nbs-metodicke", "uvo-metodicke"] },
+            "minItems": 1,
+            "uniqueItems": true,
+            "default": ["mfsr-spravodajca", "nbs-metodicke"]
+          },
+          "annoFrom": { "type": "integer", "minimum": 2010, "maximum": 2100, "default": 2010, "description": "First year of the MF SR Financny spravodajca" },
+          "annoTo": { "type": "integer", "minimum": 2010, "maximum": 2100, "description": "Last year (default: the current year)" },
+          "uvoRobotsAck": { "type": "boolean", "default": false, "description": "Acknowledge that robots.txt of uvo.gov.sk disallows generic agents; required for uvo-metodicke" },
+          "only": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "site": { "type": "string", "enum": ["mfsr-spravodajca", "nbs-metodicke", "uvo-metodicke"] },
+                "docId": { "type": "string", "minLength": 1 }
+              },
+              "required": ["site", "docId"],
+              "additionalProperties": false
+            },
+            "description": "Keep only these documents (sample filter)"
+          },
+          "maxDocs": { "type": "integer", "minimum": 1, "description": "Sample filter: stop after this many documents per item" },
+          "baseUrl": { "type": "string", "description": "Site base URL (replay server in tests)" },
+          "delaySeconds": { "type": "number", "minimum": 0.6, "default": 0.6 },
+          "verifyTls": { "type": "boolean", "default": true },
+          "refreshToken": { "type": "string" },
+          "tokenBudget": { "type": "integer", "minimum": 0, "default": 20000, "description": "Hard stop of Jina tokens per embedding Run" },
+          "dryRun": { "type": "boolean", "default": false, "description": "Embedding step plans only: no Jina call, nothing written" }
+        }
+      },
+      "x-ui": {
+        "order": ["sites", "annoFrom", "annoTo", "uvoRobotsAck", "only", "maxDocs", "baseUrl", "delaySeconds", "verifyTls", "refreshToken", "tokenBudget", "dryRun"],
+        "labels": { "sites": "Sites", "annoFrom": "From year", "annoTo": "To year", "uvoRobotsAck": "UVO robots.txt acknowledged", "only": "Only these documents", "maxDocs": "Max documents", "baseUrl": "Site base URL", "delaySeconds": "Pause between requests (s)", "verifyTls": "Verify TLS", "refreshToken": "Refresh token", "tokenBudget": "Embedding token budget", "dryRun": "Embedding dry run" },
+        "help": {
+          "sites": "MF SR Financny spravodajca, NBS guidance, UVO guidance (UVO is off by default)",
+          "annoFrom": "First year of the Financny spravodajca (2010 or later; earlier years hold only zip archives)",
+          "annoTo": "Last year of the Financny spravodajca (default the current year)",
+          "uvoRobotsAck": "robots.txt of uvo.gov.sk disallows generic agents: leave off unless you decided otherwise",
+          "only": "Sample filter: site and document id",
+          "maxDocs": "Sample filter for the live proof",
+          "baseUrl": "Only change for a replay server",
+          "delaySeconds": "Pause between requests to the source, at least 0.6 s",
+          "verifyTls": "Leave on",
+          "refreshToken": "Change this value to fetch all listings again",
+          "tokenBudget": "Maximum Jina tokens one Run may spend on embeddings (default 20000)",
+          "dryRun": "Plan the embeddings without calling Jina"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "noveltyKey": "itemId|version",
+    "retryFailed": "newUrlOnly"
+  },
+  "pipeline": [
+    {
+      "step": "detect",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-detect@v0.1.0",
+      "params": {
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "annoFrom": "${source.config.annoFrom}",
+        "annoTo": "${source.config.annoTo}",
+        "uvoRobotsAck": "${source.config.uvoRobotsAck}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}",
+        "baseUrl": "${source.config.baseUrl}",
+        "delaySeconds": "${source.config.delaySeconds}",
+        "verifyTls": "${source.config.verifyTls}",
+        "state": "${source.state}",
+        "refreshToken": "${source.config.refreshToken}"
+      },
+      "emits": "catalog",
+      "retry": { "type": "exponential", "maxAttempts": 3, "interval": "PT5M" },
+      "timeout": "PT10M"
+    },
+    {
+      "step": "grab",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-grab@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "concurrencyLimit": 1,
+      "params": {
+        "items": "${items}",
+        "dir": "${dataRoot}/dp-sk-metodika/${source.id}/raw",
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "annoFrom": "${source.config.annoFrom}",
+        "annoTo": "${source.config.annoTo}",
+        "uvoRobotsAck": "${source.config.uvoRobotsAck}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}",
+        "baseUrl": "${source.config.baseUrl}",
+        "delaySeconds": "${source.config.delaySeconds}",
+        "verifyTls": "${source.config.verifyTls}"
+      },
+      "retry": { "type": "fixed", "maxAttempts": 2, "interval": "PT2M" },
+      "timeout": "PT2H",
+      "allowedHosts": ["www.financnasprava.sk", "www.mfsr.sk", "nbs.sk", "www.uvo.gov.sk"]
+    },
+    {
+      "step": "convert",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-convert@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "params": {
+        "items": "${items}",
+        "dirIn": "${dataRoot}/dp-sk-metodika/${source.id}/raw",
+        "dirOut": "${dataRoot}/dp-sk-metodika/${source.id}/plan",
+        "sections": "${source.config.sections}",
+        "sites": "${source.config.sites}",
+        "only": "${source.config.only}",
+        "maxDocs": "${source.config.maxDocs}"
+      },
+      "resources": {
+        "maxMemoryMbytes": 3072,
+        "cpuLimit": 2
+      },
+      "timeout": "PT2H",
+      "heartbeatMaxSeconds": 900
+    },
+    {
+      "step": "ingest",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-ingest@v0.1.0",
+      "perItem": true,
+      "chunkSize": 1,
+      "db": "dataset",
+      "params": {
+        "items": "${items}",
+        "dirIn": "${dataRoot}/dp-sk-metodika/${source.id}/plan",
+        "connString": "${dataset.connString}",
+        "schema": "ds_sk_metodika"
+      },
+      "timeout": "PT1H",
+      "produces": [
+        "ds_sk_metodika.documents",
+        "ds_sk_metodika.passages",
+        "ds_sk_metodika.skipped",
+        "ds_sk_metodika.coverage"
+      ]
+    },
+    {
+      "step": "embed",
+      "class": "git:github.com/0ics-srls/dp-lex-embed@dp-p7.1",
+      "perItem": true,
+      "chunkSize": 1,
+      "concurrencyLimit": 1,
+      "db": "dataset",
+      "secrets": ["JINA_API_KEY"],
+      "params": {
+        "items": "${items}",
+        "connString": "${dataset.connString}",
+        "table": "ds_sk_metodika.passages",
+        "keyColumn": "id",
+        "textColumns": ["text_contextual"],
+        "vectorColumn": "embedding",
+        "tokenBudget": "${source.config.tokenBudget}",
+        "dryRun": "${source.config.dryRun}",
+        "jinaApiKey": "${secret.JINA_API_KEY}"
+      },
+      "retry": { "type": "exponential", "maxAttempts": 3, "interval": "PT2M" },
+      "timeout": "PT30M",
+      "heartbeatMaxSeconds": 600,
+      "produces": ["ds_sk_metodika.passages"]
+    }
+  ],
+  "releases": {
+    "breakingChanges": {
+      "0.1.0": {
+        "message": "Initial release: Slovak methodological guidance (Financna sprava, MF SR Financny spravodajca, NBS, UVO off by default), schema ds_sk_metodika with 4 tables, 5 Tools",
+        "scopedImpact": "new package"
+      }
+    }
+  },
+  "dataset": {
+    "schema": "ds_sk_metodika",
+    "migrations": "schema/migrations",
+    "contract": "serving/dataset.odcs.yaml"
+  }
+}

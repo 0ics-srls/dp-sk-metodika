@@ -1,0 +1,13 @@
+{
+  "description": "Real coverage of the Slovak methodological guidance corpus, computed from the data: one row per source (fonte) with the number of documents, first and last year, documents per section (jsonb), the text_source mix pdf/ocr (jsonb), OCR documents, passages total and passages still without embedding, skipped items by reason (jsonb), the last coverage rows listed/taken/skipped with a note (jsonb array), duplicate identity groups (informative), the last ingestion and a text with the honest limits. An empty corpus answers one row of zeros (fonte null). No parameters.",
+  "version": 1,
+  "parameters": {
+    "type": "object",
+    "properties": {}
+  },
+  "annotations": { "readOnlyHint": true, "idempotentHint": true },
+  "maxRows": 10,
+  "maxBytes": 262144,
+  "timeoutMs": 10000,
+  "pagination": "none"
+}
