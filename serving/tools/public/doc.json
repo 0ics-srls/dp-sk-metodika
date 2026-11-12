@@ -1,0 +1,30 @@
+{
+  "description": "Read one Slovak methodological guidance document with its text in slices. Give one key form: the id (uuid from sk-metodika_search or sk-metodika_lookup), or fonte + source_id, or tipo + numero + anno (numero as printed, for example 10/DZPaU/2026/MP, written with its slashes and not encoded; the estremi can match several rows, and documents without numero, such as NBS stanoviska, are reachable by id or fonte + source_id only). Returns id, fonte, source_id, legacy_doc_id, ente, tipo, section, group_label, numero, anno, data, oggetto, the text slice (offset 0-based, length 1..50000 characters, default 20000), text_length, truncated, next_offset (the offset of the next slice, null at the end), text_source (pdf = text layer, ocr = local OCR of a scan), source_url (the PDF on the authority's site: the binding text) and pdf_bytes, pdf_pages. No row means the document is not in the corpus. Guidance is not a source of law; the corpus text is a derived extract, the PDF is the original. Example: {\"id\": \"3f2c...\", \"offset\": 20000}.",
+  "version": 1,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      },
+      "fonte": { "type": "string", "enum": ["financnasprava", "mfsr-spravodajca", "nbs-metodicke", "uvo-metodicke"] },
+      "source_id": { "type": "string", "maxLength": 300 },
+      "tipo": { "type": "string", "maxLength": 50 },
+      "numero": { "type": "string", "maxLength": 60 },
+      "anno": { "type": "integer" },
+      "offset": { "type": "integer", "minimum": 0, "default": 0 },
+      "length": { "type": "integer", "minimum": 1, "maximum": 50000, "default": 20000 }
+    },
+    "anyOf": [
+      { "required": ["id"] },
+      { "required": ["fonte", "source_id"] },
+      { "required": ["tipo", "numero", "anno"] }
+    ]
+  },
+  "annotations": { "readOnlyHint": true, "idempotentHint": true },
+  "maxRows": 5,
+  "maxBytes": 1048576,
+  "timeoutMs": 10000,
+  "pagination": "none"
+}
