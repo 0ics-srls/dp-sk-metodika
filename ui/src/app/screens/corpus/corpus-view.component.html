@@ -1,0 +1,117 @@
+<section class="corpus">
+  <h1 data-testid="screen-title">{{ 'corpus.title' | transloco }}</h1>
+  <p class="hint" data-testid="corpus-attribution">{{ 'common.attribution' | transloco }}</p>
+  <p class="hint strong" data-testid="corpus-not-law">{{ 'common.notLaw' | transloco }}</p>
+
+  <div class="filters">
+    <label for="mt-search">{{ 'corpus.search' | transloco }}</label>
+    <input id="mt-search" type="search" data-testid="corpus-search" [placeholder]="'corpus.searchPlaceholder' | transloco" (input)="store.search(value($event))" />
+    <label for="mt-fonte">{{ 'corpus.fonte' | transloco }}</label>
+    <select id="mt-fonte" data-testid="corpus-fonte" (change)="store.fonte(value($event))">
+      <option value="">{{ 'common.any' | transloco }}</option>
+      @for (name of fonti; track name) {
+        <option [value]="name">{{ 'common.fonti.' + name | transloco }}</option>
+      }
+    </select>
+    <label for="mt-tipo">{{ 'corpus.tipo' | transloco }}</label>
+    <input id="mt-tipo" type="text" data-testid="corpus-tipo" (input)="store.tipo(value($event))" />
+    <label for="mt-from">{{ 'corpus.annoFrom' | transloco }}</label>
+    <input id="mt-from" type="number" data-testid="corpus-anno-from" (input)="store.annoFrom(value($event))" />
+    <label for="mt-to">{{ 'corpus.annoTo' | transloco }}</label>
+    <input id="mt-to" type="number" data-testid="corpus-anno-to" (input)="store.annoTo(value($event))" />
+    <label for="mt-mode">{{ 'corpus.mode' | transloco }}</label>
+    <select id="mt-mode" data-testid="corpus-mode" (change)="store.mode(value($event))">
+      @for (name of modes; track name) {
+        <option [value]="name">{{ 'corpus.modes.' + name | transloco }}</option>
+      }
+    </select>
+  </div>
+
+  <p class="hint" data-testid="corpus-stemming">{{ 'corpus.noStemming' | transloco }}</p>
+
+  @if (!store.paged()) {
+    <p class="hint" data-testid="corpus-mode-shown">{{ 'corpus.modeShown' | transloco: { mode: store.query().mode } }}</p>
+  } @else {
+    <div class="filters sorting">
+      <label for="mt-sort">{{ 'corpus.sort' | transloco }}</label>
+      <select id="mt-sort" data-testid="corpus-sort" (change)="store.sort(value($event))">
+        @for (name of sorts; track name) {
+          <option [value]="name">{{ 'corpus.sorts.' + name | transloco }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  @if (store.warnings().length > 0) {
+    <p class="notice" role="status" data-testid="corpus-warnings">
+      {{ 'corpus.degraded' | transloco }}:
+      @for (warning of store.warnings(); track $index) {
+        <span>{{ warning }} </span>
+      }
+    </p>
+  }
+
+  @if (store.error(); as key) {
+    <p class="error" role="alert" data-testid="corpus-error">{{ key | transloco }} <span class="detail">{{ store.errorDetail() }}</span></p>
+  } @else if (store.loading() && store.rows().length === 0) {
+    <p data-testid="corpus-loading">{{ 'common.loading' | transloco }}</p>
+  } @else if (store.rows().length === 0) {
+    <p class="empty" data-testid="corpus-empty">{{ 'corpus.empty' | transloco }}</p>
+  } @else {
+    <ul class="results">
+      @for (item of store.rows(); track item.key) {
+        <li class="result" data-testid="corpus-row">
+          <div class="line">
+            <span class="badge" data-testid="corpus-fonte-badge">
+              @if (fonteKey(item.fonte); as key) {
+                {{ key | transloco }}
+              } @else {
+                {{ item.fonte }}
+              }
+            </span>
+            <span class="badge" data-testid="corpus-badge">{{ item.tipo }}</span>
+            <button type="button" class="link" data-testid="corpus-open" (click)="store.open(item)">
+              {{ item.numero ?? ('corpus.noNumber' | transloco) }}@if (item.anno !== null) {/{{ item.anno }}}
+            </button>
+            @if (item.ocr) {
+              <span class="badge ocr" data-testid="corpus-ocr" [title]="'corpus.ocrHint' | transloco">OCR</span>
+            }
+            @if (item.ente) {
+              <span class="meta">{{ item.ente }}</span>
+            }
+            @if (item.data) {
+              <span class="meta">{{ item.data | date: 'yyyy-MM-dd' : 'UTC' }}</span>
+            }
+            @if (item.sourceUrl !== '') {
+              <a class="meta" data-testid="corpus-source" target="_blank" rel="noopener noreferrer" [href]="item.sourceUrl">{{ 'common.openSource' | transloco }}</a>
+            }
+          </div>
+          @if (item.oggetto) {
+            <div class="oggetto">{{ item.oggetto }}</div>
+          }
+          @if (item.headline.length > 0) {
+            <p class="excerpt" data-testid="corpus-headline">
+              @for (part of item.headline; track $index) {
+                @if (part.mark) {
+                  <mark>{{ part.text }}</mark>
+                } @else {
+                  <span>{{ part.text }}</span>
+                }
+              }
+            </p>
+          } @else if (item.snippet) {
+            <p class="excerpt" data-testid="corpus-snippet">{{ item.snippet }}</p>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  @if (store.paged()) {
+    <nav class="pager" [attr.aria-label]="'common.pager' | transloco">
+      <button type="button" data-testid="corpus-prev" [disabled]="!store.hasPrevious()" (click)="store.previous()">{{ 'common.previous' | transloco }}</button>
+      <span data-testid="corpus-range">{{ 'common.range' | transloco: { from: store.from(), to: store.to(), total: store.count() } }}</span>
+      <button type="button" data-testid="corpus-next" [disabled]="!store.hasNext()" (click)="store.next()">{{ 'common.next' | transloco }}</button>
+    </nav>
+  }
+</section>

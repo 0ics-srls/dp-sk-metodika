@@ -1,0 +1,89 @@
+{
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Impossibile caricare i dati.",
+    "retry": "Riprova",
+    "previous": "Precedente",
+    "next": "Successiva",
+    "pager": "Pagine",
+    "range": "{{from}}-{{to}} di {{total}}",
+    "openSource": "Apri il PDF alla fonte",
+    "any": "Qualsiasi",
+    "attribution": "Financna sprava SR, Ministerstvo financii SR, NBS, UVO; il testo vincolante è il PDF al link della fonte; le licenze di FS/MF SR/UVO non sono pubblicate, NBS richiede l'attribuzione e file non alterati; non è una fonte del diritto.",
+    "notLaw": "La prassi metodica NON è una fonte del diritto: espone l'interpretazione dell'amministrazione. Il testo vincolante è il PDF al link della fonte.",
+    "fonti": {
+      "financnasprava": "Financna sprava SR",
+      "mfsr-spravodajca": "MF SR",
+      "nbs-metodicke": "NBS",
+      "uvo-metodicke": "UVO"
+    }
+  },
+  "corpus": {
+    "title": "Prassi e metodica slovacca",
+    "search": "Cerca nei documenti",
+    "searchPlaceholder": "es. metodicky pokyn dan z prijmov",
+    "noStemming": "La ricerca slovacca normalizza maiuscole e diacritici (metodicky trova metodický) ma non ha stemming: le forme flesse non corrispondono.",
+    "mode": "Modalità",
+    "modes": { "hybrid": "hybrid", "lexical": "lexical", "semantic": "semantic" },
+    "modeShown": "Modalità di ricerca: {{mode}}",
+    "fonte": "Fonte",
+    "tipo": "Tipo",
+    "annoFrom": "Anno da",
+    "annoTo": "Anno a",
+    "sort": "Ordina per",
+    "sorts": { "data_desc": "più recenti", "data_asc": "più vecchi", "tipo": "tipo", "anno_numero": "anno e numero" },
+    "degraded": "Avviso dalla ricerca",
+    "empty": "Nessun documento trovato.",
+    "noNumber": "senza numero",
+    "ocr": "OCR",
+    "ocrHint": "Il testo proviene da un PDF scansionato letto con OCR locale: sono possibili errori."
+  },
+  "document": {
+    "title": "Documento",
+    "back": "Torna al corpus",
+    "hint": "Apri un documento dall'elenco del corpus per leggerlo qui.",
+    "notFound": "Documento non trovato.",
+    "noNumber": "senza numero",
+    "section": "Sezione",
+    "group": "Gruppo",
+    "textSource": { "pdf": "Testo PDF", "ocr": "OCR" },
+    "ocrHint": "Il testo proviene da un PDF scansionato letto con OCR locale: sono possibili errori.",
+    "length": "{{loaded}} di {{total}} caratteri",
+    "nextSlice": "Carica la parte successiva",
+    "binding": "Il testo vincolante è il PDF al link della fonte; il testo qui sotto è un'estrazione per la ricerca e la lettura.",
+    "pdf": "{{pages}} pagine, {{size}} KB",
+    "licence": {
+      "nbs": "Nota di licenza NBS: il riuso richiede l'attribuzione e i file devono restare non alterati.",
+      "other": "Nota di licenza: le condizioni d'uso di questa fonte non sono pubblicate."
+    }
+  },
+  "status": {
+    "title": "Stato del corpus",
+    "refresh": "Aggiorna",
+    "empty": "Ancora nessun documento: il primo import non è avvenuto.",
+    "columns": {
+      "fonte": "Fonte",
+      "documents": "Documenti",
+      "years": "Anni",
+      "pdf": "Testo PDF",
+      "ocr": "OCR",
+      "passages": "Passaggi",
+      "pending": "Senza embedding",
+      "duplicates": "Gruppi duplicati",
+      "lastIngested": "Ultimo import"
+    },
+    "pendingHint": "I passaggi in attesa di embedding non sono raggiungibili dalla ricerca semantica.",
+    "sections": "Documenti per sezione",
+    "skipped": "Elementi saltati per motivo",
+    "coverage": {
+      "title": "Ultime righe di copertura",
+      "item": "Elemento",
+      "listed": "Elencati",
+      "taken": "Presi",
+      "skipped": "Saltati",
+      "note": "Nota"
+    },
+    "duplicates": "Gruppi di identità duplicata (informativo): stessa fonte, ente, tipo, numero e anno più volte.",
+    "limits": "Limiti"
+  }
+}

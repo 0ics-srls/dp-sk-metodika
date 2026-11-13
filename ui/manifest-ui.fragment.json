@@ -1,0 +1,58 @@
+{
+  "ui": {
+    "hostUiApi": "1",
+    "entry": "ui/dist/main.js",
+    "styles": [
+      "ui/dist/styles.css"
+    ],
+    "menu": {
+      "label": {
+        "sk": "Metodika SR",
+        "en": "Slovak guidance",
+        "it": "Prassi e metodica slovacca"
+      },
+      "icon": "pi pi-file",
+      "order": 150
+    },
+    "screens": [
+      {
+        "id": "corpus",
+        "element": "dp-sk-metodika-corpus",
+        "label": {
+          "sk": "Metodické dokumenty",
+          "en": "Guidance documents",
+          "it": "Documenti metodici"
+        },
+        "icon": "pi pi-list",
+        "default": true
+      },
+      {
+        "id": "document",
+        "element": "dp-sk-metodika-document",
+        "label": {
+          "sk": "Detail dokumentu",
+          "en": "Document detail",
+          "it": "Dettaglio documento"
+        },
+        "icon": "pi pi-file"
+      },
+      {
+        "id": "status",
+        "element": "dp-sk-metodika-status",
+        "label": {
+          "sk": "Stav korpusu",
+          "en": "Corpus status",
+          "it": "Stato del corpus"
+        },
+        "icon": "pi pi-chart-bar"
+      }
+    ],
+    "permissions": [
+      "tools:search",
+      "tools:lookup",
+      "tools:doc",
+      "tools:status",
+      "navigate"
+    ]
+  }
+}

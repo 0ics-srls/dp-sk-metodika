@@ -1,0 +1,89 @@
+{
+  "common": {
+    "loading": "Načítavam...",
+    "error": "Údaje sa nepodarilo načítať.",
+    "retry": "Skúsiť znova",
+    "previous": "Predchádzajúca",
+    "next": "Ďalšia",
+    "pager": "Stránky",
+    "range": "{{from}}-{{to}} z {{total}}",
+    "openSource": "Otvoriť PDF na zdroji",
+    "any": "Všetky",
+    "attribution": "Finančná správa SR, Ministerstvo financií SR, NBS, ÚVO; záväzný text je PDF na odkaze zdroja; licencie FS/MF SR/ÚVO nie sú zverejnené, NBS vyžaduje uvedenie zdroja a nezmenené súbory; nie je prameň práva.",
+    "notLaw": "Metodické usmernenia NIE SÚ prameňom práva: vyjadrujú výklad správy. Záväzný text je PDF na odkaze zdroja.",
+    "fonti": {
+      "financnasprava": "Finančná správa SR",
+      "mfsr-spravodajca": "MF SR",
+      "nbs-metodicke": "NBS",
+      "uvo-metodicke": "ÚVO"
+    }
+  },
+  "corpus": {
+    "title": "Metodika SR",
+    "search": "Hľadať v dokumentoch",
+    "searchPlaceholder": "napr. metodicky pokyn dan z prijmov",
+    "noStemming": "Slovenské vyhľadávanie zlučuje veľkosť písmen aj diakritiku (metodicky nájde metodický), ale nemá lematizáciu: skloňované tvary sa nenájdu.",
+    "mode": "Režim",
+    "modes": { "hybrid": "hybrid", "lexical": "lexical", "semantic": "semantic" },
+    "modeShown": "Režim hľadania: {{mode}}",
+    "fonte": "Zdroj",
+    "tipo": "Druh",
+    "annoFrom": "Rok od",
+    "annoTo": "Rok do",
+    "sort": "Zoradiť podľa",
+    "sorts": { "data_desc": "najnovšie", "data_asc": "najstaršie", "tipo": "druhu", "anno_numero": "roku a čísla" },
+    "degraded": "Upozornenie z vyhľadávania",
+    "empty": "Nenašli sa žiadne dokumenty.",
+    "noNumber": "bez čísla",
+    "ocr": "OCR",
+    "ocrHint": "Text pochádza zo skenovaného PDF prečítaného lokálnym OCR: možné sú chyby."
+  },
+  "document": {
+    "title": "Dokument",
+    "back": "Späť na korpus",
+    "hint": "Dokument otvorte zo zoznamu v korpuse.",
+    "notFound": "Dokument sa nenašiel.",
+    "noNumber": "bez čísla",
+    "section": "Sekcia",
+    "group": "Skupina",
+    "textSource": { "pdf": "Text PDF", "ocr": "OCR" },
+    "ocrHint": "Text pochádza zo skenovaného PDF prečítaného lokálnym OCR: možné sú chyby.",
+    "length": "{{loaded}} z {{total}} znakov",
+    "nextSlice": "Načítať ďalšiu časť",
+    "binding": "Záväzný text je PDF na odkaze zdroja; text nižšie je extrakcia na hľadanie a čítanie.",
+    "pdf": "{{pages}} strán, {{size}} KB",
+    "licence": {
+      "nbs": "Licenčná poznámka NBS: použitie vyžaduje uvedenie zdroja a súbory sa musia ponechať nezmenené.",
+      "other": "Licenčná poznámka: podmienky použitia tohto zdroja nie sú zverejnené."
+    }
+  },
+  "status": {
+    "title": "Stav korpusu",
+    "refresh": "Obnoviť",
+    "empty": "Zatiaľ žiadne dokumenty: prvý import ešte nebežal.",
+    "columns": {
+      "fonte": "Zdroj",
+      "documents": "Dokumenty",
+      "years": "Roky",
+      "pdf": "Text PDF",
+      "ocr": "OCR",
+      "passages": "Pasáže",
+      "pending": "Bez embeddingu",
+      "duplicates": "Skupiny duplicít",
+      "lastIngested": "Posledný import"
+    },
+    "pendingHint": "Pasáže čakajúce na embedding sa sémantickým hľadaním nenájdu.",
+    "sections": "Dokumenty podľa sekcie",
+    "skipped": "Vynechané položky podľa dôvodu",
+    "coverage": {
+      "title": "Posledné riadky pokrytia",
+      "item": "Položka",
+      "listed": "Uvedené",
+      "taken": "Prevzaté",
+      "skipped": "Vynechané",
+      "note": "Poznámka"
+    },
+    "duplicates": "Skupiny duplicitnej identity (informatívne): rovnaký zdroj, orgán, druh, číslo a rok viackrát.",
+    "limits": "Obmedzenia"
+  }
+}

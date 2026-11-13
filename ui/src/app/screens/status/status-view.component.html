@@ -1,0 +1,120 @@
+<section class="status">
+  <header class="head">
+    <h1 data-testid="screen-title">{{ 'status.title' | transloco }}</h1>
+    <button type="button" data-testid="status-refresh" [disabled]="store.loading()" (click)="store.refresh()">{{ 'status.refresh' | transloco }}</button>
+  </header>
+
+  @if (store.error(); as key) {
+    <p class="error" role="alert" data-testid="status-error">{{ key | transloco }} <span class="detail">{{ store.errorDetail() }}</span></p>
+  } @else if (!store.loaded()) {
+    <p data-testid="status-loading">{{ 'common.loading' | transloco }}</p>
+  } @else if (store.empty()) {
+    <p data-testid="status-empty">{{ 'status.empty' | transloco }}</p>
+  } @else {
+    <table class="grid">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'status.columns.fonte' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.documents' | transloco }}</th>
+          <th scope="col">{{ 'status.columns.years' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.pdf' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.ocr' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.passages' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.pending' | transloco }}</th>
+          <th scope="col" class="num">{{ 'status.columns.duplicates' | transloco }}</th>
+          <th scope="col">{{ 'status.columns.lastIngested' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of store.dataRows(); track row.fonte) {
+          <tr data-testid="status-row">
+            <td>
+              @if (fonteKey(row.fonte); as key) {
+                {{ key | transloco }}
+              } @else {
+                {{ row.fonte }}
+              }
+            </td>
+            <td class="num">{{ row.documents }}</td>
+            <td>{{ row.firstYear ?? '-' }}-{{ row.lastYear ?? '-' }}</td>
+            <td class="num" data-testid="status-pdf">{{ store.pdfDocuments(row) }}</td>
+            <td class="num" data-testid="status-ocr">{{ row.ocrDocuments }}</td>
+            <td class="num">{{ row.passagesTotal }}</td>
+            <td class="num">
+              @if (row.passagesPending > 0) {
+                <span class="warning" role="status" data-testid="status-warning" [title]="'status.pendingHint' | transloco">{{ row.passagesPending }}</span>
+              } @else {
+                0
+              }
+            </td>
+            <td class="num" data-testid="status-duplicates">{{ row.duplicateIdentityGroups }}</td>
+            <td>{{ row.lastIngestedAt | date: 'yyyy-MM-dd HH:mm' : 'UTC' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <p class="note" data-testid="status-duplicates-note">{{ 'status.duplicates' | transloco }}</p>
+
+    @for (group of store.sections(); track group.fonte) {
+      <div class="counts" data-testid="status-sections">
+        <strong>{{ 'status.sections' | transloco }} ({{ group.fonte }})</strong>
+        <ul>
+          @for (item of group.entries; track item.name) {
+            <li><code>{{ item.name }}</code>: {{ item.count }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    @for (group of store.skipped(); track group.fonte) {
+      <div class="counts" data-testid="status-skipped">
+        <strong>{{ 'status.skipped' | transloco }} ({{ group.fonte }})</strong>
+        <ul>
+          @for (item of group.entries; track item.name) {
+            <li><code>{{ item.name }}</code>: {{ item.count }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    @if (store.coverage().length > 0) {
+      <table class="grid coverage">
+        <caption>{{ 'status.coverage.title' | transloco }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ 'status.columns.fonte' | transloco }}</th>
+            <th scope="col">{{ 'status.coverage.item' | transloco }}</th>
+            <th scope="col" class="num">{{ 'status.coverage.listed' | transloco }}</th>
+            <th scope="col" class="num">{{ 'status.coverage.taken' | transloco }}</th>
+            <th scope="col" class="num">{{ 'status.coverage.skipped' | transloco }}</th>
+            <th scope="col">{{ 'status.coverage.note' | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (line of store.coverage(); track line.key) {
+            <tr data-testid="coverage-row" [class.missing]="line.skipped > 0">
+              <td>{{ line.fonte }}</td>
+              <td>{{ line.item }}</td>
+              <td class="num" data-testid="coverage-listed">{{ line.listed }}</td>
+              <td class="num" data-testid="coverage-taken">{{ line.taken }}</td>
+              <td class="num" data-testid="coverage-skipped">{{ line.skipped }}</td>
+              <td data-testid="coverage-note">{{ line.note }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
+
+  @if (store.limits(); as limits) {
+    <section class="limits">
+      <h2>{{ 'status.limits' | transloco }}</h2>
+      <p class="note" data-testid="status-limits">{{ limits }}</p>
+    </section>
+  }
+
+  <footer class="footer" data-testid="status-footer">
+    <p>{{ 'common.attribution' | transloco }}</p>
+    <p>{{ 'common.notLaw' | transloco }}</p>
+  </footer>
+</section>
