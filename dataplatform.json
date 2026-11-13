@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.dataplatform.0ics.ai/dataplatform/1.json",
   "name": "sk-metodika",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "hostApi": "1",
   "sources": [
     {
@@ -275,8 +275,44 @@
       "produces": ["ds_sk_metodika.passages"]
     }
   ],
+  "ui": {
+    "hostUiApi": "1",
+    "entry": "ui/dist/main.js",
+    "styles": ["ui/dist/styles.css"],
+    "menu": {
+      "label": { "sk": "Metodika SR", "en": "Slovak guidance", "it": "Prassi e metodica slovacca" },
+      "icon": "pi pi-file",
+      "order": 150
+    },
+    "screens": [
+      {
+        "id": "corpus",
+        "element": "dp-sk-metodika-corpus",
+        "label": { "sk": "Metodické dokumenty", "en": "Guidance documents", "it": "Documenti metodici" },
+        "icon": "pi pi-list",
+        "default": true
+      },
+      {
+        "id": "document",
+        "element": "dp-sk-metodika-document",
+        "label": { "sk": "Detail dokumentu", "en": "Document detail", "it": "Dettaglio documento" },
+        "icon": "pi pi-file"
+      },
+      {
+        "id": "status",
+        "element": "dp-sk-metodika-status",
+        "label": { "sk": "Stav korpusu", "en": "Corpus status", "it": "Stato del corpus" },
+        "icon": "pi pi-chart-bar"
+      }
+    ],
+    "permissions": ["tools:search", "tools:lookup", "tools:doc", "tools:status", "navigate"]
+  },
   "releases": {
     "breakingChanges": {
+      "0.2.0": {
+        "message": "Screens added: guidance list with search, filters and lookup, document detail with text slices and the PDF link, corpus status (Console menu Slovak guidance); no Tool, column or table is changed, no data change",
+        "scopedImpact": "sk-metodika UI"
+      },
       "0.1.0": {
         "message": "Initial release: Slovak methodological guidance (Financna sprava, MF SR Financny spravodajca, NBS, UVO off by default), schema ds_sk_metodika with 4 tables, 5 Tools",
         "scopedImpact": "new package"

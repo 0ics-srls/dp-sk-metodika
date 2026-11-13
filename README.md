@@ -79,3 +79,5 @@ selector of the legacy (`/extdoc/` only) is fixed for layout (b). `status` repor
 ## Version history
 
 0.1.0: first release (data, five Tools). See `releases.breakingChanges` in the Manifest.
+
+0.2.0: Screens added (corpus, document, status; Console menu Slovak guidance); no Tool, column or table is changed.
