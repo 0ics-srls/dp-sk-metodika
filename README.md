@@ -42,7 +42,7 @@ as the fallback), a full-text vector and embeddable passages. Dataset schema `ds
 
 ## Pins
 
-Classes (all `0ics-srls`, tag `v0.1.0`): `dp-sk-metodika-detect`, `dp-sk-metodika-grab`, `dp-sk-metodika-convert`, `dp-sk-metodika-ingest`; shared embed class
+Classes (all `0ics-srls`; detect and ingest tag `v0.1.0`, grab and convert tag `v0.1.1`): `dp-sk-metodika-detect`, `dp-sk-metodika-grab`, `dp-sk-metodika-convert`, `dp-sk-metodika-ingest`; shared embed class
 `dp-lex-embed@dp-p7.1`. Full-text configuration `sk_unaccent` (simple + unaccent: case and diacritics folded, no stemming; migration 0002; the Host provides the
 `unaccent` extension). The generated column, the contract (`ftsConfig`) and every Tool use the same plain identifier `sk_unaccent`.
 
@@ -81,3 +81,5 @@ selector of the legacy (`/extdoc/` only) is fixed for layout (b). `status` repor
 0.1.0: first release (data, five Tools). See `releases.breakingChanges` in the Manifest.
 
 0.2.0: Screens added (corpus, document, status; Console menu Slovak guidance); no Tool, column or table is changed.
+
+0.2.1: classes grab and convert pinned to v0.1.1 (live fix P81b-34): `source_id` has a single rule in the grab class, the convert class trusts the sidecar. No Tool, column or table is changed.
