@@ -1,0 +1,89 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "The data could not be loaded.",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next",
+    "pager": "Pages",
+    "range": "{{from}}-{{to}} of {{total}}",
+    "openSource": "Open the PDF at the source",
+    "any": "Any",
+    "attribution": "Financna sprava SR, Ministerstvo financii SR, NBS, UVO; the binding text is the PDF at the source link; licences of FS/MF SR/UVO not published, NBS requires attribution and unaltered files; not a source of law.",
+    "notLaw": "Methodological guidance is NOT a source of law: it states the interpretation of the administration. The binding text is the PDF at the source link.",
+    "fonti": {
+      "financnasprava": "Financna sprava SR",
+      "mfsr-spravodajca": "MF SR",
+      "nbs-metodicke": "NBS",
+      "uvo-metodicke": "UVO"
+    }
+  },
+  "corpus": {
+    "title": "Slovak guidance",
+    "search": "Search the documents",
+    "searchPlaceholder": "e.g. metodicky pokyn dan z prijmov",
+    "noStemming": "Slovak search folds case and diacritics (metodicky finds metodický) but has no stemming: inflected forms do not match.",
+    "mode": "Mode",
+    "modes": { "hybrid": "hybrid", "lexical": "lexical", "semantic": "semantic" },
+    "modeShown": "Search mode: {{mode}}",
+    "fonte": "Source",
+    "tipo": "Type",
+    "annoFrom": "Year from",
+    "annoTo": "Year to",
+    "sort": "Sort by",
+    "sorts": { "data_desc": "newest first", "data_asc": "oldest first", "tipo": "type", "anno_numero": "year and number" },
+    "degraded": "Notice from the search",
+    "empty": "No documents found.",
+    "noNumber": "no number",
+    "ocr": "OCR",
+    "ocrHint": "The text comes from a scanned PDF read with local OCR: errors are possible."
+  },
+  "document": {
+    "title": "Document",
+    "back": "Back to the corpus",
+    "hint": "Open a document from the corpus list to read it here.",
+    "notFound": "This document was not found.",
+    "noNumber": "no number",
+    "section": "Section",
+    "group": "Group",
+    "textSource": { "pdf": "PDF text", "ocr": "OCR" },
+    "ocrHint": "The text comes from a scanned PDF read with local OCR: errors are possible.",
+    "length": "{{loaded}} of {{total}} characters",
+    "nextSlice": "Load the next part",
+    "binding": "The binding text is the PDF at the source link; the text below is an extraction for search and reading.",
+    "pdf": "{{pages}} pages, {{size}} KB",
+    "licence": {
+      "nbs": "NBS licence note: reuse requires attribution and the files must be kept unaltered.",
+      "other": "Licence note: the terms of use of this source are not published."
+    }
+  },
+  "status": {
+    "title": "Corpus status",
+    "refresh": "Refresh",
+    "empty": "No documents yet: the first import has not run.",
+    "columns": {
+      "fonte": "Source",
+      "documents": "Documents",
+      "years": "Years",
+      "pdf": "PDF text",
+      "ocr": "OCR",
+      "passages": "Passages",
+      "pending": "Without embedding",
+      "duplicates": "Duplicate groups",
+      "lastIngested": "Last ingest"
+    },
+    "pendingHint": "Passages that wait for an embedding are not reachable by the semantic search.",
+    "sections": "Documents per section",
+    "skipped": "Skipped items by reason",
+    "coverage": {
+      "title": "Last coverage rows",
+      "item": "Item",
+      "listed": "Listed",
+      "taken": "Taken",
+      "skipped": "Skipped",
+      "note": "Note"
+    },
+    "duplicates": "Duplicate identity groups (informative): the same source, authority, type, number and year more than once.",
+    "limits": "Limits"
+  }
+}

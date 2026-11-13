@@ -1,0 +1,86 @@
+<section class="document">
+  <header class="head">
+    <h1 data-testid="screen-title">{{ 'document.title' | transloco }}</h1>
+    <button type="button" data-testid="doc-back" (click)="store.back()">{{ 'document.back' | transloco }}</button>
+  </header>
+  <p class="hint" data-testid="doc-attribution">{{ 'common.attribution' | transloco }}</p>
+  <p class="hint strong" data-testid="doc-not-law">{{ 'common.notLaw' | transloco }}</p>
+
+  @switch (store.state()) {
+    @case ('idle') {
+      <p data-testid="doc-hint">{{ 'document.hint' | transloco }}</p>
+    }
+    @case ('loading') {
+      <p data-testid="doc-loading">{{ 'common.loading' | transloco }}</p>
+    }
+    @case ('notfound') {
+      <p data-testid="doc-notfound">{{ 'document.notFound' | transloco }}</p>
+    }
+    @case ('error') {
+      <p class="error" role="alert" data-testid="doc-error">{{ 'common.error' | transloco }} <span class="detail">{{ store.errorDetail() }}</span></p>
+    }
+    @case ('ready') {
+      @if (store.doc(); as doc) {
+        <div class="header" data-testid="doc-header">
+          <span class="badge" data-testid="doc-fonte">
+            @if (fonteKey(doc.fonte); as key) {
+              {{ key | transloco }}
+            } @else {
+              {{ doc.fonte }}
+            }
+          </span>
+          <span class="badge" data-testid="doc-tipo">{{ doc.tipo }}</span>
+          @if (doc.numero !== null) {
+            <strong>{{ doc.numero }}@if (doc.anno !== null) {/{{ doc.anno }}}</strong>
+          } @else {
+            <strong>{{ 'document.noNumber' | transloco }} ({{ doc.anno ?? '-' }})</strong>
+          }
+          @if (doc.data) {
+            <span class="meta">{{ doc.data | date: 'yyyy-MM-dd' : 'UTC' }}</span>
+          }
+          @if (doc.ente) {
+            <span class="meta">{{ doc.ente }}</span>
+          }
+          @if (doc.section) {
+            <span class="meta" data-testid="doc-section">{{ 'document.section' | transloco }}: {{ doc.section }}</span>
+          }
+          @if (doc.groupLabel) {
+            <span class="meta" data-testid="doc-group">{{ 'document.group' | transloco }}: {{ doc.groupLabel }}</span>
+          }
+          <span class="badge" [class.ocr]="doc.textSource === 'ocr'" data-testid="doc-text-source">
+            @if (doc.textSource === 'ocr') {
+              {{ 'document.textSource.ocr' | transloco }}
+            } @else {
+              {{ 'document.textSource.pdf' | transloco }}
+            }
+          </span>
+          @if (doc.textSource === 'ocr') {
+            <span class="badge ocr" data-testid="doc-ocr" [title]="'document.ocrHint' | transloco">OCR</span>
+          }
+          @if (doc.pdfPages !== null && store.pdfKb() !== null) {
+            <span class="meta" data-testid="doc-pdf-info">{{ 'document.pdf' | transloco: { pages: doc.pdfPages, size: store.pdfKb() } }}</span>
+          }
+          @if (store.sourceLink() !== '') {
+            <a class="meta" data-testid="doc-source" target="_blank" rel="noopener noreferrer" [href]="store.sourceLink()">{{ 'common.openSource' | transloco }}</a>
+          }
+        </div>
+        @if (doc.oggetto) {
+          <h2 class="oggetto" data-testid="doc-oggetto">{{ doc.oggetto }}</h2>
+        }
+        <p class="hint strong" data-testid="doc-binding">{{ 'document.binding' | transloco }}</p>
+        <p class="hint" data-testid="doc-licence">{{ store.licence() | transloco }}</p>
+
+        <article class="body">
+          <pre class="text pre-wrap" data-testid="doc-text">{{ store.text() }}</pre>
+          <p class="meta" data-testid="doc-length">{{ 'document.length' | transloco: { loaded: store.text().length, total: doc.textLength } }}</p>
+          @if (store.moreError() !== '') {
+            <p class="error" role="alert" data-testid="doc-slice-error">{{ 'common.error' | transloco }} <span class="detail">{{ store.moreError() }}</span></p>
+          }
+          @if (store.hasMore()) {
+            <button type="button" data-testid="doc-next" [disabled]="store.loadingMore()" (click)="store.nextSlice()">{{ 'document.nextSlice' | transloco }}</button>
+          }
+        </article>
+      }
+    }
+  }
+</section>
