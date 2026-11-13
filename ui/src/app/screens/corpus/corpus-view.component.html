@@ -71,7 +71,11 @@
             </span>
             <span class="badge" data-testid="corpus-badge">{{ item.tipo }}</span>
             <button type="button" class="link" data-testid="corpus-open" (click)="store.open(item)">
-              {{ item.numero ?? ('corpus.noNumber' | transloco) }}@if (item.anno !== null) {/{{ item.anno }}}
+              @if (item.numero !== null) {
+                {{ estremi(item.numero, item.anno) }}
+              } @else {
+                {{ 'corpus.noNumber' | transloco }}@if (item.anno !== null) {/{{ item.anno }}}
+              }
             </button>
             @if (item.ocr) {
               <span class="badge ocr" data-testid="corpus-ocr" [title]="'corpus.ocrHint' | transloco">OCR</span>

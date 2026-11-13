@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { estremiLabel } from '../../shared/estremi';
 import { fonteKey } from '../../shared/fonte';
 import { DocumentStore } from './document.store';
 
@@ -14,4 +15,5 @@ import { DocumentStore } from './document.store';
 export class DocumentViewComponent {
   protected readonly store = inject(DocumentStore);
   protected readonly fonteKey = fonteKey;
+  protected readonly estremi = estremiLabel;
 }

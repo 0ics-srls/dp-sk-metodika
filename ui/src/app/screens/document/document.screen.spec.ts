@@ -56,6 +56,7 @@ describe('DocumentScreen', () => {
       for (const text of ['Financna sprava SR', 'metodicky pokyn', '10/DZPaU/2026/MP', '2026-03-04', 'metodicke-pokyny', 'Dane z prijmov']) {
         expect(header, text).toContain(text);
       }
+      expect(header).not.toContain('10/DZPaU/2026/MP/2026');
       expect(el(fixture, 'doc-oggetto').textContent).toContain('Metodicky pokyn k dani z prijmov');
       expect(el(fixture, 'doc-text').textContent).toBe('Prvy usek textu.');
       expect(el(fixture, 'doc-length').textContent).toContain('16 of 16');
