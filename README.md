@@ -83,3 +83,5 @@ selector of the legacy (`/extdoc/` only) is fixed for layout (b). `status` repor
 0.2.0: Screens added (corpus, document, status; Console menu Slovak guidance); no Tool, column or table is changed.
 
 0.2.1: classes grab and convert pinned to v0.1.1 (live fix P81b-34): `source_id` has a single rule in the grab class, the convert class trusts the sidecar. No Tool, column or table is changed.
+
+0.2.2: Screens show the document number without repeating the year when the code contains it (live fix P81b-35). No Tool, column or table is changed.

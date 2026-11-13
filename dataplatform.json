@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.dataplatform.0ics.ai/dataplatform/1.json",
   "name": "sk-metodika",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "hostApi": "1",
   "sources": [
     {
@@ -309,6 +309,10 @@
   },
   "releases": {
     "breakingChanges": {
+      "0.2.2": {
+        "message": "Screens: the document number no longer repeats the year when the code already contains it (10/DZPaU/2026/MP, not 10/DZPaU/2026/MP/2026); no Tool, column, table or data change",
+        "scopedImpact": "sk-metodika UI"
+      },
       "0.2.1": {
         "message": "Classes grab and convert v0.1.1: source_id has one rule (grab) and the convert class trusts the sidecar value; no Tool, column, table or data change",
         "scopedImpact": "sk-metodika classes"

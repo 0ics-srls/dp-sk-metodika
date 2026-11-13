@@ -31,7 +31,7 @@
           </span>
           <span class="badge" data-testid="doc-tipo">{{ doc.tipo }}</span>
           @if (doc.numero !== null) {
-            <strong>{{ doc.numero }}@if (doc.anno !== null) {/{{ doc.anno }}}</strong>
+            <strong>{{ estremi(doc.numero, doc.anno) }}</strong>
           } @else {
             <strong>{{ 'document.noNumber' | transloco }} ({{ doc.anno ?? '-' }})</strong>
           }

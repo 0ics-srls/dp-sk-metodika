@@ -82,6 +82,7 @@ describe('CorpusScreen', () => {
       expect(rows[0]?.textContent).toContain('Financna sprava SR');
       expect(rows[0]?.textContent).toContain('metodicky pokyn');
       expect(rows[0]?.textContent).toContain('10/DZPaU/2026/MP');
+      expect(rows[0]?.textContent).not.toContain('10/DZPaU/2026/MP/2026');
       expect(rows[0]?.textContent).toContain('Metodicky pokyn k dani z prijmov');
       expect(rows[0]?.textContent).toContain('2026-03-04');
     });
