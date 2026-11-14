@@ -1,4 +1,6 @@
-import { APP_ROOT, flattenKeys, templateKeys } from '../testing/source-scan';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { APP_ROOT, flattenEntries, flattenKeys, templateKeys } from '../testing/source-scan';
 import enDict from './en.json';
 import itDict from './it.json';
 import skDict from './sk.json';
@@ -17,6 +19,34 @@ describe('dictionaries', () => {
       .filter((used) => !defined.has(used.key))
       .map((used) => `${used.key} (${used.path})`);
     expect(missing).toEqual([]);
+  });
+
+  // P84-15: Slovak users read the sk strings; these are the ASCII-folded spellings of words that need diacritics.
+  const FOLDED_SK_WORDS = [
+    'metodicke', 'hladat', 'nacitavam', 'udaje', 'predchadzajuca', 'dalsia', 'vsetky', 'sud', 'zavery', 'prehlady',
+    'zmluv', 'nenasli', 'najst', 'spat', 'nacitat', 'otvorit', 'obnovit', 'posledny', 'preskocene', 'stranky',
+    'zatial', 'pramen', 'vypisane', 'prevzate', 'financna', 'kolegium', 'rezim', 'pasaze',
+  ];
+
+  it('should reject ASCII-folded Slovak words in every sk string and Screen label when the dictionary and Manifest are read', () => {
+    const manifest = JSON.parse(readFileSync(join(process.cwd(), '..', 'dataplatform.json'), 'utf8')) as {
+      ui: { menu: { label: { sk: string } }; screens: { label: { sk: string } }[] };
+    };
+    const strings = [
+      ...Object.values(flattenEntries(skDict)).map(String),
+      manifest.ui.menu.label.sk,
+      ...manifest.ui.screens.map((screen) => screen.label.sk),
+    ];
+    expect(strings.length).toBeGreaterThan(20);
+    const folded = strings.flatMap((value) =>
+      value
+        .replace(/{{[^}]*}}/g, ' ')
+        .toLowerCase()
+        .split(/[^\p{L}]+/u)
+        .filter((word) => FOLDED_SK_WORDS.includes(word))
+        .map((word) => `${word} in "${value}"`),
+    );
+    expect(folded).toEqual([]);
   });
 
   it('should find template keys when scanning (no vacuous pass)', () => {
