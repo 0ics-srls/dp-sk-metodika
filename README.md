@@ -84,4 +84,6 @@ selector of the legacy (`/extdoc/` only) is fixed for layout (b). `status` repor
 
 0.2.1: classes grab and convert pinned to v0.1.1 (live fix P81b-34): `source_id` has a single rule in the grab class, the convert class trusts the sidecar. No Tool, column or table is changed.
 
+0.2.3: `search` declares `x-embed.skipWhen` on `mode` lexical (a lexical call does not embed the query); grab class `dp-sk-metodika-grab` v0.1.2 percent-encodes the path of Financna sprava document URLs (`source_id` and `legacy_doc_id` unchanged); the UI test rejects ASCII-folded Slovak words. No Tool, column or table is changed.
+
 0.2.2: Screens show the document number without repeating the year when the code contains it (live fix P81b-35). No Tool, column or table is changed.

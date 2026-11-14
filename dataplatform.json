@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.dataplatform.0ics.ai/dataplatform/1.json",
   "name": "sk-metodika",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "hostApi": "1",
   "sources": [
     {
@@ -187,7 +187,7 @@
     },
     {
       "step": "grab",
-      "class": "git:github.com/0ics-srls/dp-sk-metodika-grab@v0.1.1",
+      "class": "git:github.com/0ics-srls/dp-sk-metodika-grab@v0.1.2",
       "perItem": true,
       "chunkSize": 1,
       "concurrencyLimit": 1,
@@ -309,6 +309,10 @@
   },
   "releases": {
     "breakingChanges": {
+      "0.2.3": {
+        "message": "search Tool declares x-embed.skipWhen on mode lexical: a lexical call no longer embeds the query (no Jina call); the grab class is pinned to v0.1.2 which percent-encodes the path of Financna sprava document URLs (source_id and legacy_doc_id unchanged); Slovak Screen strings checked for diacritics; no Tool is removed, no column removed, additive only",
+        "scopedImpact": "sk-metodika_search, document source_url of Financna sprava hrefs with a space"
+      },
       "0.2.2": {
         "message": "Screens: the document number no longer repeats the year when the code already contains it (10/DZPaU/2026/MP, not 10/DZPaU/2026/MP/2026); no Tool, column, table or data change",
         "scopedImpact": "sk-metodika UI"
